@@ -548,24 +548,40 @@
       });
 
      // CartoDB Positron / OSM tiles for a clean vector background
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 19
-}).addTo(map);
-
-      if (containerId === 'main-map-container') {
-        mainMapInstance = map;// Center map over Bangladesh with maximum focus
+// ১. ম্যাপ ব্যাকগ্রাউন্ড ও বাউন্ডারি লক সেট করা
 const map = L.map(containerId, {
-    center: [23.6850, 90.3563], // বাংলাদেশের কেন্দ্রবিন্দু
-    zoom: 7.5,                   // কেবল বাংলাদেশ ফোকাস করবে
-    minZoom: 7,                  // জুম আউট করে ভারতের অংশ দেখতে দেবে না
-    maxZoom: 12,
-    maxBounds: [                 // বাংলাদেশের বাইরে স্ক্রোল করা বন্ধ করবে
-        [20.5, 87.5], // দক্ষিণ-পশ্চিম কোণ
-        [26.7, 92.8]  // উত্তর-পূর্ব কোণ
-    ],
-    maxBoundsViscosity: 1.0
+    center: [23.6850, 90.3563],
+    zoom: 7,
+    zoomControl: false,
+    dragging: true,
+    scrollWheelZoom: true
 });
+
+// ২. কেবল বাংলাদেশের GeoJSON ভেক্টর শেপ লোড করা
+fetch('https://raw.githubusercontent.com/highcharts/highcharts/master/samples/data/bangladesh-district.geo.json')
+    .then(response => response.json())
+    .then(geojsonData => {
+        L.geoJSON(geojsonData, {
+            style: function (feature) {
+                return {
+                    fillColor: '#059669', // সুন্দর সবুজ রং
+                    weight: 1.5,
+                    opacity: 1,
+                    color: '#ffffff',     // সাদা বর্ডার লাইন
+                    fillOpacity: 0.9
+                };
+            },
+            onEachFeature: function (feature, layer) {
+                if (feature.properties && feature.properties.name) {
+                    layer.bindTooltip(feature.properties.name, {
+                        permanent: true,
+                        direction: 'center',
+                        className: 'district-label'
+                    });
+                }
+            }
+        }).addTo(map);
+    });
       }
 
       // Render District Circle Polygons/Markers for all 64 Districts
