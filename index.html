@@ -537,37 +537,41 @@
       if (mainMapInstance && containerId === 'main-map-container') {
         mainMapInstance.remove();
         mainMapInstance = null;
-      }
+     // Center map over Bangladesh
+        const map = L.map(containerId, {
+            center: [23.6850, 90.3563],
+            zoom: 7,
+            minZoom: 6,
+            maxZoom: 10,
+            zoomControl: true,
+            scrollWheelZoom: false
+        });
 
-      // Center map over Bangladesh
-      const map = L.map(containerId, {
-        center: [23.8103, 90.4125],
-        zoom: 7,
-        zoomControl: true,
-        scrollWheelZoom: isInteractive
-      });
-
-     // CartoDB Positron / OSM tiles for a clean vector background
-// ১. ম্যাপ ব্যাকগ্রাউন্ড ও বাউন্ডারি লক সেট করা
-const map = L.map(containerId, {
-    center: [23.6850, 90.3563],
-    zoom: 7,
-    zoomControl: false,
-    dragging: true,
-    scrollWheelZoom: true
-});
-
-// ২. কেবল বাংলাদেশের GeoJSON ভেক্টর শেপ লোড করা
-fetch('https://raw.githubusercontent.com/highcharts/highcharts/master/samples/data/bangladesh-district.geo.json')
-    .then(response => response.json())
-    .then(geojsonData => {
-        L.geoJSON(geojsonData, {
-            style: function (feature) {
-                return {
-                    fillColor: '#059669', // সুন্দর সবুজ রং
-                    weight: 1.5,
-                    opacity: 1,
-                    color: '#ffffff',     // সাদা বর্ডার লাইন
+        // Fetch & Render Bangladesh Districts GeoJSON
+        fetch('https://raw.githubusercontent.com/highcharts/highcharts/master/samples/data/bangladesh-district.geo.json')
+            .then(response => response.json())
+            .then(geojsonData => {
+                L.geoJSON(geojsonData, {
+                    style: function (feature) {
+                        return {
+                            fillColor: '#059669', // ছবির মতো সবুজ রং
+                            weight: 1.2,
+                            opacity: 1,
+                            color: '#ffffff',     // সাদা বর্ডার লাইন
+                            fillOpacity: 0.9
+                        };
+                    },
+                    onEachFeature: function (feature, layer) {
+                        if (feature.properties && feature.properties.name) {
+                            layer.bindTooltip(feature.properties.name, {
+                                permanent: true,
+                                direction: 'center',
+                                className: 'district-label'
+                            });
+                        }
+                    }
+                }).addTo(map);
+            });
                     fillOpacity: 0.9
                 };
             },
