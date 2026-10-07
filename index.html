@@ -554,7 +554,18 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
       if (containerId === 'main-map-container') {
-        mainMapInstance = map;
+        mainMapInstance = map;// Center map over Bangladesh with maximum focus
+const map = L.map(containerId, {
+    center: [23.6850, 90.3563], // বাংলাদেশের কেন্দ্রবিন্দু
+    zoom: 7.5,                   // কেবল বাংলাদেশ ফোকাস করবে
+    minZoom: 7,                  // জুম আউট করে ভারতের অংশ দেখতে দেবে না
+    maxZoom: 12,
+    maxBounds: [                 // বাংলাদেশের বাইরে স্ক্রোল করা বন্ধ করবে
+        [20.5, 87.5], // দক্ষিণ-পশ্চিম কোণ
+        [26.7, 92.8]  // উত্তর-পূর্ব কোণ
+    ],
+    maxBoundsViscosity: 1.0
+});
       }
 
       // Render District Circle Polygons/Markers for all 64 Districts
