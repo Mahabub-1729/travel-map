@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="bn" translate="no">
-<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <head>
 <meta charset="utf-8">
 <!-- opened on the old workers.dev address (shared before the domain moved): hide the page, the script below moves to unseenbangladesh.com -->
 <script>if(/\.workers\.dev$/.test(location.hostname))document.documentElement.style.visibility="hidden"</script>
@@ -733,7 +734,7 @@ footer.ft .credit{margin:16px 0 0;font-size:15px}
 <body>
 <div class="container">
   <nav>
-    <div class="logo"><img class="logo-mark" src="assets/icons/favicon-64.png" alt="" width="28" height="28">Unseen Bangladesh</div>
+    <div class="logo"><img class="logo-mark" src="assets/icons/favicon-64.png" alt="" width="28" height="28">Travel Bangladesh</div>
     <div class="tabs" role="navigation" aria-label="পাতা">
       <a class="tab" href="#map" data-view="map">আমার ম্যাপ</a>
       <a class="tab" href="#world" data-view="world">বিশ্ব<span class="tl"> ম্যাপ</span></a>
@@ -796,10 +797,11 @@ footer.ft .credit{margin:16px 0 0;font-size:15px}
       </div>
       <p class="hint">টিপস: ম্যাপের জেলায় সরাসরি ক্লিক করেও বাছাই করতে পারেন।</p>
       <h3 class="dl-title">আপনার ম্যাপ ডাউনলোড করুন</h3>
-      <div class="dl">
-        <button class="btn" data-dl="png">↓ PNG</button>
-        <button class="btn" data-dl="jpg">↓ JPG</button>
-        <button class="btn" data-dl="pdf">↓ PDF</button>
+      <div class="download-buttons">
+    <button class="download-btn" onclick="downloadMap('png')">↓ PNG</button>
+    <button class="download-btn" onclick="downloadMap('jpg')">↓ JPG</button>
+    <button class="download-btn" onclick="downloadMap('pdf')">↓ PDF</button>
+</div>
       </div>
       <div class="rank" id="rank" hidden aria-live="polite"></div>
     </section>
@@ -2749,6 +2751,31 @@ route();
 render();
 document.fonts.ready.then(()=>Promise.all(["500","600","700","800"].map(w=>document.fonts.load(`${w} 40px ${FONT}`,"বাংলাদেশ ০১২৩")))).then(render);
 if("serviceWorker" in navigator) addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+</script>
+<script>
+  function downloadMap(format) {
+    // যে ডিভ বা সেকশনে ম্যাপটি আছে তার ID দিন (এখানে 'map-container' ধরা হয়েছে)
+    const mapElement = document.getElementById('map-container'); 
+
+    if (!mapElement) {
+      alert('ম্যাপ খুঁজে পাওয়া যায়নি!');
+      return;
+    }
+
+    html2canvas(mapElement).then(canvas => {
+      const link = document.createElement('a');
+      
+      if (format === 'png') {
+        link.download = 'my-bangladesh-map.png';
+        link.href = canvas.toDataURL('image/png');
+      } else if (format === 'jpg') {
+        link.download = 'my-bangladesh-map.jpg';
+        link.href = canvas.toDataURL('image/jpeg');
+      }
+
+      link.click();
+    });
+  }
 </script>
 </body>
 </html>
