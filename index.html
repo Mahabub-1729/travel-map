@@ -1,57 +1,305 @@
-বাংলাদেশ ঘুরুন<!DOCTYPE html> <html lang="bn"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Group Tour Booking Bangladesh</title> <style> *{ box-sizing:border-box; margin:0; padding:0; } body{ font-family:Arial,"Noto Sans Bengali",sans-serif; background:#f4f7f6; color:#17202a; } header{ background:#087f5b; color:white; padding:18px 6%; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; } .logo{ font-size:25px; font-weight:bold; } nav a{ color:white; text-decoration:none; margin-left:20px; font-weight:bold; } .hero{ background:linear-gradient(135deg,#087f5b,#16a085); color:white; padding:75px 8%; text-align:center; } .hero h1{ font-size:48px; margin-bottom:15px; } .hero p{ font-size:19px; margin-bottom:25px; } .btn{ background:#ffb703; color:#111; padding:13px 25px; border:none; border-radius:8px; font-weight:bold; cursor:pointer; text-decoration:none; display:inline-block; } .section{ padding:50px 7%; } .section-title{ text-align:center; font-size:32px; margin-bottom:30px; } .cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:25px; } .card{ background:white; padding:25px; border-radius:15px; box-shadow:0 5px 20px rgba(0,0,0,.08); } .card h3{ color:#087f5b; margin-bottom:12px; } .price{ font-size:25px; font-weight:bold; color:#087f5b; margin:15px 0; } /* SEAT BOOKING */ .booking-area{ display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start; } .bus{ background:#263238; padding:25px; border-radius:20px; max-width:430px; margin:auto; } .driver{ background:#455a64; color:white; padding:12px; text-align:center; border-radius:8px; margin-bottom:20px; } .seats{ display:grid; grid-template-columns:repeat(5,1fr); gap:9px; } .seat{ background:#fff; border:none; padding:12px 5px; border-radius:7px; cursor:pointer; font-weight:bold; } .seat:hover{ background:#90caf9; } .seat.selected{ background:#087f5b; color:white; } .seat.booked{ background:#777; color:white; cursor:not-allowed; } .form-box{ background:white; padding:30px; border-radius:15px; box-shadow:0 5px 20px rgba(0,0,0,.08); } .form-box input, .form-box select{ width:100%; padding:13px; margin:8px 0 15px; border:1px solid #ccc; border-radius:7px; } .total{ font-size:24px; font-weight:bold; color:#087f5b; margin:20px 0; } /* DISTRICT */ .districts{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; } .district{ background:white; padding:16px; border-radius:8px; text-align:center; cursor:pointer; border:1px solid #ddd; } .district:hover{ background:#087f5b; color:white; } /* TICKET */ #ticket{ display:none; max-width:700px; margin:40px auto; background:white; padding:35px; border:2px dashed #087f5b; border-radius:12px; } .ticket-header{ text-align:center; margin-bottom:25px; } .ticket-row{ display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #ddd; } footer{ background:#17202a; color:white; text-align:center; padding:30px; margin-top:50px; } @media(max-width:800px){ header{ flex-direction:column; gap:12px; } .hero h1{ font-size:32px; } .booking-area{ grid-template-columns:1fr; } } </style> </head><!-- Leaflet Map -->
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"#bangladeshMap{
-    width:100%;
-    height:650px;
-    border-radius:18px;
-    overflow:hidden;
-    box-shadow:0 5px 25px rgba(0,0,0,.15);
-    border:3px solid #087f5b;
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>নামাজ জীবন | Namaz Jibon</title>
+<style>
+:root{--green:#086b4b;--light:#eaf7ef;--gold:#d8b45b}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Noto Sans Bengali","Hind Siliguri",Arial,sans-serif;background:#f4f8f5;color:#19352a}
+header{background:linear-gradient(135deg,#064e3b,#0b8056);color:white;padding:28px 16px;text-align:center}
+header h1{margin:0;font-size:30px}
+header p{margin:8px 0 0}
+main{max-width:1000px;margin:20px auto;padding:0 14px}
+section{background:white;padding:20px;margin-bottom:18px;border-radius:16px;box-shadow:0 3px 14px #1231}
+h2{font-size:21px;color:var(--green);margin-top:0}
+select,button{padding:11px;border-radius:9px;border:1px solid #cbd9d0;font:inherit}
+button{cursor:pointer;background:var(--green);color:white;border:0}
+button:hover{opacity:.9}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.stat{background:var(--light);padding:14px;text-align:center;border-radius:12px}
+.stat strong{display:block;font-size:25px;color:var(--green)}
+.prayers{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
+.prayer{border:1px solid #dbe9df;padding:14px;border-radius:12px}
+.prayer label{display:flex;align-items:center;gap:8px;font-weight:bold}
+.prayer input{width:20px;height:20px;accent-color:var(--green)}
+.time{display:block;font-size:20px;margin:12px 0 4px;color:var(--green);font-weight:bold}
+.muted{font-size:13px;color:#64756b}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px 6px;border-bottom:1px solid #e2eae4;text-align:left}
+th{background:var(--light)}
+.guide li{margin:10px 0;line-height:1.8}
+footer{text-align:center;padding:24px;color:#63736a}
+@media(max-width:480px){header h1{font-size:25px}.stats{grid-template-columns:repeat(3,1fr)}.stat{padding:9px 4px}.stat strong{font-size:20px}section{padding:15px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>☪ নামাজ জীবন</h1>
+  <p>নামাজের সময় জানুন, নিয়মিত নামাজ আদায়ের চেষ্টা করুন</p>
+  <p>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+</header>
+
+<main>
+<section>
+  <h2>📍 আপনার শহর নির্বাচন করুন</h2>
+  <select id="city">
+    <option value="Dhaka">ঢাকা</option>
+    <option value="Chattogram">চট্টগ্রাম</option>
+    <option value="Sylhet">সিলেট</option>
+    <option value="Rajshahi">রাজশাহী</option>
+    <option value="Khulna">খুলনা</option>
+    <option value="Barishal">বরিশাল</option>
+    <option value="Rangpur">রংপুর</option>
+    <option value="Mymensingh">ময়মনসিংহ</option>
+    <option value="Cumilla">কুমিল্লা</option>
+    <option value="Gazipur">গাজীপুর</option>
+    <option value="Narayanganj">নারায়ণগঞ্জ</option>
+    <option value="Bogura">বগুড়া</option>
+    <option value="Jashore">যশোর</option>
+    <option value="Cox's Bazar">কক্সবাজার</option>
+  </select>
+  <button onclick="loadTimes()">সময় দেখুন</button>
+  <p id="date"></p>
+  <p class="muted">সময়সূচি গণনাভিত্তিক। আপনার স্থানীয় মসজিদের সময়ের সঙ্গে মিলিয়ে নিন।</p>
+</section>
+
+<section>
+  <h2>🕌 আজকের নামাজের সময়সূচি</h2>
+  <div class="stats">
+    <div class="stat"><strong id="done">০</strong>আদায় করেছি</div>
+    <div class="stat"><strong>৫</strong>ওয়াক্ত</div>
+    <div class="stat"><strong id="percent">০%</strong>অগ্রগতি</div>
+  </div>
+  <div class="prayers" id="prayers"></div>
+  <div class="actions">
+    <button onclick="shareProgress()">📤 অগ্রগতি শেয়ার</button>
+    <button onclick="copyProgress()">📋 লেখা কপি</button>
+    <button onclick="resetToday()">আজকের হিসাব মুছুন</button>
+  </div>
+</section>
+
+<section>
+  <h2>🌅 সূর্যোদয় ও সূর্যাস্ত</h2>
+  <div class="stats">
+    <div class="stat"><strong>🌄</strong>সূর্যোদয়<span id="sunrise">লোড হচ্ছে...</span></div>
+    <div class="stat"><strong>🌇</strong>সূর্যাস্ত<span id="sunset">লোড হচ্ছে...</span></div>
+    <div class="stat"><strong>🌙</strong>পরবর্তী নামাজ<span id="next">--</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>📅 মাসিক নামাজের ক্যালেন্ডার</h2>
+  <div class="actions">
+    <select id="month"></select>
+    <select id="year"></select>
+    <button onclick="loadCalendar()">ক্যালেন্ডার দেখুন</button>
+  </div>
+  <p class="muted">তারিখ, পাঁচ ওয়াক্তের সময় এবং সূর্যোদয় দেখুন।</p>
+  <div style="overflow-x:auto">
+    <table>
+      <thead><tr>
+        <th>তারিখ</th><th>ফজর</th><th>সূর্যোদয়</th>
+        <th>যোহর</th><th>আসর</th><th>মাগরিব</th><th>এশা</th>
+      </tr></thead>
+      <tbody id="calendar"></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="guide">
+  <h2>📖 পাঁচ ওয়াক্ত নামাজ সম্পর্কে জানুন</h2>
+  <h3>পাঁচ ওয়াক্তের ফরজ রাকাত</h3>
+  <ul>
+    <li><b>ফজর:</b> ২ রাকাত ফরজ।</li>
+    <li><b>যোহর:</b> ৪ রাকাত ফরজ।</li>
+    <li><b>আসর:</b> ৪ রাকাত ফরজ।</li>
+    <li><b>মাগরিব:</b> ৩ রাকাত ফরজ।</li>
+    <li><b>এশা:</b> ৪ রাকাত ফরজ।</li>
+  </ul>
+  <p>উপরের তালিকায় শুধু ফরজ রাকাত দেওয়া হয়েছে। সুন্নত, নফল ও বিতরের বিধান আলাদা; মাজহাবভেদে কিছু আমলের বিবরণে পার্থক্য থাকতে পারে।</p>
+  <h3>নামাজের আগে যা জানতে হবে</h3>
+  <ul>
+    <li>অজু ও প্রয়োজনীয় পবিত্রতা অর্জন করা।</li>
+    <li>নামাজের সময় হওয়া এবং কিবলামুখী হওয়া।</li>
+    <li>শরীর, পোশাক ও নামাজের স্থান পবিত্র রাখা।</li>
+    <li>সতর ঢেকে নামাজের নিয়ত করা।</li>
+  </ul>
+  <h3>নামাজের প্রধান ধাপ</h3>
+  <ol>
+    <li>নিয়ত ও তাকবিরে তাহরিমা।</li>
+    <li>কিয়াম, সানা, সূরা ফাতিহা ও প্রয়োজনীয় কিরাত।</li>
+    <li>রুকু ও দুই সিজদা।</li>
+    <li>রাকাত অনুযায়ী নামাজ সম্পন্ন করা।</li>
+    <li>শেষ বৈঠকে তাশাহহুদ, দরুদ, দোয়া ও সালাম।</li>
+  </ol>
+  <p>এটি প্রাথমিক পরিচিতি, পূর্ণাঙ্গ নামাজ শিক্ষার বিকল্প নয়। উচ্চারণ, আরবি পাঠ ও মাসআলা নির্ভরযোগ্য আলেম বা শিক্ষকের কাছ থেকে শিখুন।</p>
+</section>
+
+<section>
+  <h2>🤲 আজকের স্মরণিকা</h2>
+  <p>“নিশ্চয়ই নামাজ মুমিনদের ওপর নির্ধারিত সময়ে ফরজ।” — সূরা আন-নিসা, ৪:১০৩ (অর্থের সারাংশ)</p>
+  <p>প্রতিদিন নামাজের জন্য সময় বের করুন এবং আল্লাহর কাছে নিয়মিত থাকার তাওফিক চান।</p>
+</section>
+</main>
+
+<footer>নামাজ জীবন © ২০২৬ | ইবাদতে নিয়মিত হওয়ার একটি ব্যক্তিগত সহায়ক</footer>
+
+<script>
+const names = [
+  ["Fajr","ফজর"],["Dhuhr","যোহর"],["Asr","আসর"],
+  ["Maghrib","মাগরিব"],["Isha","এশা"]
+];
+const bnDigits = n => String(n).replace(/\d/g,d=>"০১২৩৪৫৬৭৮৯"[d]);
+const dhakaDate = () => new Intl.DateTimeFormat("en-CA",{
+  timeZone:"Asia/Dhaka",year:"numeric",month:"2-digit",day:"2-digit"
+}).format(new Date());
+
+let today = dhakaDate();
+let currentData = null;
+
+function getChecks(){
+  try{return JSON.parse(localStorage.getItem("namaz-"+today))||{}}
+  catch{return {}}
 }
-
-.district-label{
-    font-weight:bold;
-    font-size:12px;
+function saveChecks(data){
+  localStorage.setItem("namaz-"+today,JSON.stringify(data));
 }
-
-.map-info{
-    background:white;
-    padding:15px;
-    border-radius:10px;
-    box-shadow:0 2px 10px rgba(0,0,0,.15);
+function renderPrayers(times){
+  const checks=getChecks();
+  document.getElementById("prayers").innerHTML=names.map(([key,name])=>`
+    <div class="prayer">
+      <label>
+        <input type="checkbox" data-key="${key}"
+        ${checks[key]?"checked":""}>
+        ${name}
+      </label>
+      <span class="time">${times[key]||"--:--"}</span>
+      <span class="muted">নামাজের সময়</span>
+    </div>`).join("");
+  document.querySelectorAll("#prayers input").forEach(el=>{
+    el.addEventListener("change",()=>{
+      const c=getChecks();c[el.dataset.key]=el.checked;
+      saveChecks(c);updateProgress();
+    });
+  });
+  updateProgress();
 }
-/>
-
-<script
-  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script> <body> <!-- HEADER --> <header> <div class="logo"> 🚌 Group Tour Booking </div> <nav> <a href="#home">Home</a> <a href="#tours">Tours</a> <a href="#booking">Booking</a> <a href="#district">Bangladesh</a> </nav> </header> <!-- HERO --> <section class="hero" id="home"> <h1>বাংলাদেশ ঘুরুন TALTIL এর সাথে</h1> <p> Group Tour • 45 Seat Bus • Online Seat Booking • bKash Payment </p> <a href="#tours" class="btn"> Book Your Tour </a> </section> <!-- TOURS --> <section class="section" id="tours"> <h2 class="section-title"> Upcoming Group Tours </h2> <div class="cards"> <div class="card"> <h3>🌊 Sunamganj Tour</h3> <p> Jadukata River • Tanguar Haor • Niladri </p> <p>📅 20 November 2026</p> <div class="price"> ৳ 2,000 </div> <button class="btn" onclick="selectTour('Jadukata River & Tanguar Haor',2800)"> Book Now </button> </div> <div class="card"> <h3>🌴 Sundarban Tour</h3> <p> Karamjal • Harbaria • Sundarban </p> <p>📅 27 November 2026</p> <div class="price"> ৳ 3,500 </div> <button class="btn" onclick="selectTour('Sundarban Group Tour',3500)"> Book Now </button> </div> <div class="card"> <h3>🏔️ Bandarban Tour</h3> <p> Nilgiri • Nilachal • Bandarban </p> <p>📅 04 December 2026</p> <div class="price"> ৳ 4,000 </div> <button class="btn" onclick="selectTour('Bandarban Tour',4000)"> Book Now </button> </div> </div> </section> <!-- BOOKING --> <section class="section" id="booking"> <h2 class="section-title"> 45 Seat Bus Booking </h2> <div class="booking-area"> <!-- BUS --> <div> <section class="section" id="district">
-
-    <h2 class="section-title">
-        🇧🇩 বাংলাদেশের 64 জেলার Tourist Map
-    </h2>
-
-    <p style="text-align:center;margin-bottom:20px;">
-        মানচিত্রের যেকোনো জেলার উপর ক্লিক করুন
-    </p>
-
-    <div id="bangladeshMap"></div>
-
-    <div id="selectedDistrict"
-         style="
-         margin-top:20px;
-         background:white;
-         padding:25px;
-         border-radius:15px;
-         box-shadow:0 5px 20px rgba(0,0,0,.08);
-         ">
-
-        <h2>📍 জেলা নির্বাচন করুন</h2>
-
-        <p>
-            বাংলাদেশের মানচিত্র থেকে একটি জেলা নির্বাচন করুন।
-        </p>
-
-    </div>
-
-</section><div class="bus"> <div class="driver"> 🚍 DRIVER </div> <div class="seats" id="seats"></div> </div> <p style="text-align:center;margin-top:15px"> 🟩 Selected &nbsp;&nbsp; ⬜ Available &nbsp;&nbsp; ⬛ Booked </p> </div> <!-- FORM --> <div class="form-box"> <h2>Passenger Information</h2> <label>Tour</label> <input id="tourName" readonly placeholder="Select a tour first"> <label>Passenger Name</label> <input id="customerName" placeholder="আপনার নাম" required> <label>Mobile Number</label> <input id="phone" placeholder="01XXXXXXXXX" required> <label>Email</label> <input id="email" type="email" placeholder="Email"> <label>NID Number</label> <input id="nid" placeholder="NID"> <p> Selected Seats: <strong id="selectedSeats">None</strong> </p> <div class="total"> Total: ৳ <span id="total">0</span> </div> <button class="btn" onclick="createBooking()"> 💳 Continue to bKash </button> </div> </div> </section> <!-- DISTRICTS --> <section class="section" id="district"> <h2 class="section-title">বাংলাদেশের 64 জেলা </h2> <div class="districts" id="districtList"></div> </section> <!-- TOURIST PLACE --> <section class="section"> <h2 class="section-title"> Tourist Places </h2> <div class="card" id="touristPlace"> <h3> একটি জেলা নির্বাচন করুন </h3> <p> জেলা নির্বাচন করলে এখানে জনপ্রিয় পর্যটন স্থান দেখাবে। </p> </div> </section> <!-- TICKET --> <section id="ticket"> <div class="ticket-header"> <h1>🚌 Group Tour Booking</h1> <p>Official Booking Ticket</p> </div> <div class="ticket-row"> <strong>Booking ID</strong> <span id="ticketId"></span> </div> <div class="ticket-row"> <strong>Passenger</strong> <span id="ticketName"></span> </div> <div class="ticket-row"> <strong>Mobile</strong> <span id="ticketPhone"></span> </div> <div class="ticket-row"> <strong>Tour</strong> <span id="ticketTour"></span> </div> <div class="ticket-row"> <strong>Seats</strong> <span id="ticketSeats"></span> </div> <div class="ticket-row"> <strong>Amount</strong> <span>৳ <span id="ticketAmount"></span></span> </div> <div class="ticket-row"> <strong>Payment</strong> <span style="color:green"> PAID </span> </div> <br> <button class="btn" onclick="window.print()"> 🖨️ Print / Save PDF </button> </section> <footer> <h3>Group Tour Booking</h3> <p> Bangladesh Travel • Group Tour • Seat Booking </p> <p> © 2026 Group Tour Booking </p> </footer> <script> /* ============================== TOUR DATA ============================== */ let currentTour=""; let ticketPrice=0; let selectedSeats=[]; /* ============================== 45 SEAT BUS ============================== */ let bookedSeats=[3,8,17,25,34]; const seatContainer=document.getElementById("seats"); for(let i=1;i<=45;i++){ const button=document.createElement("button"); button.className="seat"; button.innerText=i; if(bookedSeats.includes(i)){ button.classList.add("booked"); button.disabled=true; } button.onclick=function(){ if(button.classList.contains("selected")){ button.classList.remove("selected"); selectedSeats= selectedSeats.filter( seat=>seat!==i ); }else{ button.classList.add("selected"); selectedSeats.push(i); } updateBooking(); }; seatContainer.appendChild(button); } /* ============================== SELECT TOUR ============================== */ function selectTour(name,price){ currentTour=name; ticketPrice=price; document.getElementById("tourName").value=name; document .getElementById("booking") .scrollIntoView({ behavior:"smooth" }); updateBooking(); } /* ============================== UPDATE TOTAL ============================== */ function updateBooking(){ document.getElementById( "selectedSeats" ).innerText= selectedSeats.length ? selectedSeats.join(", ") : "None"; document.getElementById( "total" ).innerText= selectedSeats.length*ticketPrice; } /* ============================== CREATE BOOKING ============================== */ function createBooking(){ const name= document.getElementById( "customerName" ).value; const phone= document.getElementById( "phone" ).value; if(!currentTour){ alert("Please select a tour."); return; } if(!name || !phone){ alert( "Please enter your name and mobile number." ); return; } if(selectedSeats.length===0){ alert( "Please select at least one seat." ); return; } /* DEMO PAYMENT Real bKash API will be connected here in the production version. */ alert( "Demo bKash Payment\n\n" +"Amount: ৳ " +(selectedSeats.length*ticketPrice) +"\n\nPayment successful!" ); generateTicket(); } /* ============================== GENERATE TICKET ============================== */ function generateTicket(){ const bookingID= "GTB-" +Date.now() .toString() .slice(-8); document.getElementById( "ticketId" ).innerText=bookingID; document.getElementById( "ticketName" ).innerText= document.getElementById( "customerName" ).value; document.getElementById( "ticketPhone" ).innerText= document.getElementById( "phone" ).value; document.getElementById( "ticketTour" ).innerText=currentTour; document.getElementById( "ticketSeats" ).innerText= selectedSeats.join(", "); document.getElementById( "ticketAmount" ).innerText= selectedSeats.length*ticketPrice; document.getElementById( "ticket" ).style.display="block"; document .getElementById("ticket") .scrollIntoView({ behavior:"smooth" }); } /* ============================== BANGLADESH DISTRICTS ============================== */ const districts=[ "ঢাকা", "ফরিদপুর", "গাজীপুর", "গোপালগঞ্জ", "জামালপুর", "কিশোরগঞ্জ", "মাদারীপুর", "মানিকগঞ্জ", "মুন্সীগঞ্জ", "ময়মনসিংহ", "নারায়ণগঞ্জ", "নরসিংদী", "নেত্রকোনা", "রাজবাড়ী", "শরীয়তপুর", "টাঙ্গাইল", "বগুড়া", "জয়পুরহাট", "নওগাঁ", "নাটোর", "চাঁপাইনবাবগঞ্জ", "পাবনা", "রাজশাহী", "সিরাজগঞ্জ", "দিনাজপুর", "গাইবান্ধা", "কুড়িগ্রাম", "লালমনিরহাট", "নীলফামারী", "পঞ্চগড়", "রংপুর", "ঠাকুরগাঁও", "বরগুনা", "বরিশাল", "ভোলা", "ঝালকাঠি", "পটুয়াখালী", "পিরোজপুর", "বান্দরবান", "ব্রাহ্মণবাড়িয়া", "চাঁদপুর", "চট্টগ্রাম", "কুমিল্লা", "কক্সবাজার", "ফেনী", "খাগড়াছড়ি", "লক্ষ্মীপুর", "নোয়াখালী", "রাঙ্গামাটি", "হবিগঞ্জ", "মৌলভীবাজার", "সুনামগঞ্জ", "সিলেট", "বাগেরহাট", "চুয়াডাঙ্গা", "যশোর", "ঝিনাইদহ", "খুলনা", "কুষ্টিয়া", "মাগুরা", "মেহেরপুর", "নড়াইল", "সাতক্ষীরা" ]; const touristPlaces={ "ঢাকা":[ "লালবাগ কেল্লা", "আহসান মঞ্জিল", "জাতীয় সংসদ ভবন", "বাংলাদেশ জাতীয় জাদুঘর" ], "মুন্সীগঞ্জ":[ "ইদ্রাকপুর কেল্লা", "বিক্রমপুর", "মাওয়া ঘাট", "পদ্মা নদী" ], "সুনামগঞ্জ":[ "টাঙ্গুয়ার হাওর", "জাদুকাটা নদী", "নীলাদ্রি লেক", "শিমুল বাগান" ], "কক্সবাজার":[ "কক্সবাজার সমুদ্র সৈকত", "ইনানী বিচ", "হিমছড়ি", "মেরিন ড্রাইভ" ], "সিলেট":[ "জাফলং", "সাদাপাথর", "বিছানাকান্দি", "রাতারগুল" ], "বান্দরবান":[ "নীলগিরি", "নীলাচল", "বগালেক", "নাফাখুম" ], "রাঙ্গামাটি":[ "কাপ্তাই লেক", "শুভলং", "ঝুলন্ত সেতু" ], "খুলনা":[ "সুন্দরবন", "করমজল", "ষাট গম্বুজ মসজিদ" ] }; const districtList= document.getElementById( "districtList" ); districts.forEach( district=>{ const div= document.createElement("div"); div.className="district"; div.innerText= "📍 "+district; div.onclick=function(){ showTouristPlaces( district ); }; districtList.appendChild(div); }); function showTouristPlaces(district){ const places= touristPlaces[district] || [ "স্থানীয় দর্শনীয় স্থান", "নদী / হাওর / বিল", "ঐতিহাসিক স্থান", "স্থানীয় খাবার ও সংস্কৃতি" ]; document.getElementById( "touristPlace" ).innerHTML= "<h2>📍 " +district+ "</h2>" + places.map( place=> "<p style='padding:10px 0;border-bottom:1px solid #ddd'>" +"📌 " +place+ "</p>" ).join(""); } </script> </body> </html>
+function updateProgress(){
+  const c=getChecks();
+  const n=names.filter(([k])=>c[k]).length;
+  document.getElementById("done").textContent=bnDigits(n);
+  document.getElementById("percent").textContent=bnDigits(n*20)+"%";
+}
+function formatTime(t){
+  return t ? t.split(" ")[0] : "--:--";
+}
+async function loadTimes(){
+  const city=document.getElementById("city").value;
+  document.getElementById("date").textContent="তারিখ: "+today+" | "+city;
+  document.getElementById("prayers").textContent="সময়সূচি লোড হচ্ছে...";
+  try{
+    const [y,m,d]=today.split("-");
+    const date=`${d}-${m}-${y}`;
+    const url=`https://api.aladhan.com/v1/timingsByCity/${date}?city=${encodeURIComponent(city)}&country=Bangladesh&method=1&school=1`;
+    const res=await fetch(url);
+    if(!res.ok)throw Error("API error");
+    const json=await res.json();
+    if(json.code!==200)throw Error("No data");
+    currentData=json.data.timings;
+    renderPrayers(currentData);
+    document.getElementById("sunrise").textContent=formatTime(currentData.Sunrise);
+    document.getElementById("sunset").textContent=formatTime(currentData.Sunset);
+    findNext(currentData);
+  }catch(e){
+    document.getElementById("prayers").textContent=
+      "সময়সূচি আনা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।";
+  }
+}
+function findNext(t){
+  const now=new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Dhaka"}));
+  let next="পরবর্তী দিন";
+  for(const [key,name] of names){
+    const [h,m]=formatTime(t[key]).split(":").map(Number);
+    const p=new Date(now);p.setHours(h,m,0,0);
+    if(p>now){next=name;break;}
+  }
+  document.getElementById("next").textContent=next;
+}
+function resetToday(){
+  if(confirm("আজকের নামাজের চিহ্নগুলো মুছে ফেলবেন?")){
+    localStorage.removeItem("namaz-"+today);
+    if(currentData)renderPrayers(currentData);
+  }
+}
+function progressText(){
+  const c=getChecks();
+  const n=names.filter(([k])=>c[k]).length;
+  return `আজকের নামাজের অগ্রগতি (${today}): ${n}/5 ওয়াক্ত।\nনামাজ জীবন — নিয়মিত নামাজ আদায়ের চেষ্টা করি।`;
+}
+async function shareProgress(){
+  const text=progressText();
+  if(navigator.share){
+    try{await navigator.share({title:"আমার নামাজের অগ্রগতি",text});}
+    catch(e){}
+  }else{
+    await copyProgress();
+    alert("লেখা কপি করা হয়েছে। এখন সামাজিক মাধ্যমে পেস্ট করুন।");
+  }
+}
+async function copyProgress(){
+  try{
+    await navigator.clipboard.writeText(progressText());
+    alert("অগ্রগতির লেখা কপি হয়েছে।");
+  }catch(e){
+    prompt("লেখাটি কপি করুন:",progressText());
+  }
+}
+function initCalendarSelectors(){
+  const month=document.getElementById("month");
+  const year=document.getElementById("year");
+  const d=new Date(today+"T12:00:00+06:00");
+  for(let i=1;i<=12;i++){
+    month.add(new Option(bnDigits(i),i,i===d.getMonth()+1,i===d.getMonth()+1));
+  }
+  for(let i=d.getFullYear()-2;i<=d.getFullYear()+2;i++){
+    year.add(new Option(bnDigits(i),i,i===d.getFullYear(),i===d.getFullYear()));
+  }
+}
+async function loadCalendar(){
+  const city=document.getElementById("city").value;
+  const month=document.getElementById("month").value;
+  const year=document.getElementById("year").value;
+  const body=document.getElementById("calendar");
+  body.innerHTML="<tr><td colspan='7'>লোড হচ্ছে...</td></tr>";
+  try{
+    const url=`https://api.aladhan.com/v1/calendarByCity/${year}/${month}?city=${encodeURIComponent(city)}&country=Bangladesh&method=1&school=1`;
+    const res=await fetch(url);
+    if(!res.ok)throw Error("API error");
+    const json=await res.json();
+    if(json.code!==200)throw Error("No data");
+    body.innerHTML=json.data.map(day=>{
+      const t=day.timings,d=day.date.gregorian;
+      return `<tr>
+        <td>${d.day}-${d.month.number}-${d.year}</td>
+        <td>${formatTime(t.Fajr)}</td>
+        <td>${formatTime(t.Sunrise)}</td>
+        <td>${formatTime(t.Dhuhr)}</td>
+        <td>${formatTime(t.Asr)}</td>
+        <td>${formatTime(t.Maghrib)}</td>
+        <td>${formatTime(t.Isha)}</td>
+      </tr>`;
+    }).join("");
+  }catch(e){
+    body.innerHTML="<tr><td colspan='7'>ক্যালেন্ডার লোড হয়নি। আবার চেষ্টা করুন।</td></tr>";
+  }
+}
+initCalendarSelectors();
+loadTimes();
+loadCalendar();
+</script>
+</body>
+</html>
